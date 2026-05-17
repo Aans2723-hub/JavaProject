@@ -1,5 +1,12 @@
 package com.project.organix.repository;
 
-public class TransaksiRepository {
-    
+import com.project.organix.model.Transaksi;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+
+@Repository
+public interface TransaksiRepository extends JpaRepository<Transaksi, Long> {
+    // Fungsi custom untuk mencari riwayat transaksi berdasarkan ID warga
+    List<Transaksi> findByUserId(Long userId);
 }

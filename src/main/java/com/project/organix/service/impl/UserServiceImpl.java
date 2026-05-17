@@ -1,5 +1,6 @@
 package com.project.organix.service.impl;
 
+import com.project.organix.exception.ResourceNotFoundException;
 import com.project.organix.model.User;
 import com.project.organix.repository.UserRepository;
 import com.project.organix.service.interfaces.UserService;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service // Wajib ada agar Spring Boot tahu ini adalah Koki utamanya
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -18,10 +19,21 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
-    // INI ISINYA: Method overriding dari interface
     @Override
     public List<User> getAllUsers() {
-        // Menggunakan repository untuk mengambil data dari database organix_db
-        return userRepository.findAll(); 
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User dengan ID " + id + " tidak ditemukan"));
+    }
+
+    @Override
+    public User registerUser(User user) {
+        // Poin awal warga baru selalu 0
+        user.setTotalPoint(0);
+        return userRepository.save(user);
     }
 }
